@@ -1,0 +1,37 @@
+.list{
+	list-style-type: none;
+}
+.footer{
+	color: white;
+}
+
+.img-bg{
+	background-image: url("../Background images/spring-summer-season-abstract-nature.jpg");
+	max-width: 100%;
+	height: auto;
+}
+.img-bg1{
+	background-image: url("../Background images/watercolor-nature-background.jpg");
+	max-width: 100%;
+	height: auto;
+}
+.pad-top{
+	padding-top: 12%;
+	padding-bottom: auto;
+}
+
+
+.image_resize{
+    max-width: 100px;
+    padding-right: -15px;
+    padding-left: 15px;
+}
+
+
+	strong{
+		position: absolute;
+	  	left: 235px;
+	  	top: -4px;
+	  	z-index: 3;
+	  	color: white;
+	}
