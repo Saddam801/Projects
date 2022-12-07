@@ -58,7 +58,6 @@
 	<!--Header Section-->
 	<?php include 'userHeader.php'; ?>
 
-
 <!--Banner Section-->	
 	<section>
 		
@@ -151,36 +150,47 @@
 				<div class="row" style="margin-left: 70px;">
 		        	<?php
 		        	if (isset($_POST['filter_btn'])) {
+						$count = 0;
 		        		$filter_value=$_POST['filter_value'];
-			        	$sql = "SELECT * FROM product WHERE CONCAT(p_name,c_id,p_area,p_prices,p_address) LIKE '%$filter_value%'";
-						$result = $conn->query($sql);
-						if ($result->num_rows > 0) {
-							// output data of each row
-							while($row = $result->fetch_assoc()) { ?>
+						$currentPage = !isset($_REQUEST['page']) ? 1 : $_REQUEST['page'];
+						$limit=6;
+						$offset=($currentPage-1)*$limit;
 
-						<div class="col-md-4">
+			        	// $sql = "SELECT * FROM product WHERE CONCAT(p_name,c_id,p_area,p_prices,p_address) LIKE '%$filter_value%' order by p_id DESC limit $offset, $limit";
+			        	$s_sql = "SELECT * FROM product order by p_id DESC limit $offset, $limit;";
+						$limited_data = $conn->query($s_sql);
+						if ($limited_data->num_rows > 0){
+							while($dataRow = $limited_data->fetch_assoc()){
+								$all = implode('', $dataRow);
+								if (str_contains(strtolower($all), strtolower($filter_value))){
+									$count++;
+									?>
+									
+								<div class="col-md-4">
 
-			                <img class="img-fluid" src="<?php echo $row['p_thumb_image'];?>" style="width:295px; height: 295px;"><br>
-			            	<?php
-			                $c_id=$row['c_id'];
-			                $sql1 = "SELECT * FROM category WHERE id='$c_id'";
-			                $result1 = $conn->query($sql1);
-			                $row1 = $result1->fetch_assoc();
-			                echo $row1['cat_name'];
-			                ?><br>
-			                <?php echo $row['p_name'];?><br>
-				            <?php echo $row['p_area'];?>Sqft.<br>
-				            $<?php echo $row['p_prices'];?><br>
-				            <?php echo $row['p_address'];?><br>
-			                <a class="btn btn-primary" href="usersViewPD.php?vpid=<?php echo $row['p_id'];?>">View More</a>
-							
-						</div>
-		        	<?php
+									<img class="img-fluid" src="<?php echo $dataRow['p_thumb_image'];?>" style="width:295px; height: 295px;"><br>
+									<?php
+									$c_id=$dataRow['c_id'];
+									$sql1 = "SELECT * FROM category WHERE id='$c_id'";
+									$result1 = $conn->query($sql1);
+									$row1 = $result1->fetch_assoc();
+									echo $row1['cat_name'];
+									?><br>
+									<?php echo $dataRow['p_name'];?><br>
+									<?php echo $dataRow['p_area'];?>Sqft.<br>
+									$<?php echo $dataRow['p_prices'];?><br>
+									<?php echo $dataRow['p_address'];?><br>
+									<a class="btn btn-primary" href="usersViewPD.php?vpid=<?php echo $dataRow['p_id'];?>">View More</a>
+									
+								</div>
+									
+									<?php
+								}
 							}
-						}
-
-						 else {
-						   echo "0 results";
+							if ($count <= 0) echo "0 results";
+							
+						}else{
+							echo "0 results";
 						}
 		        	}
 		        	?>
