@@ -2,6 +2,11 @@
 	
 	include 'dpconnection.php';
 	session_start();
+
+	if (!isset($_SESSION['users_Login'])){
+		header('Location: usersViewProduct.php?s=e');
+	}
+
 	$vpid=$_REQUEST['vpid'];
 ?>
 

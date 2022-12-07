@@ -2,6 +2,19 @@
 	
 	include 'dpconnection.php';
 	session_start();
+
+	if (!isset($_SESSION['users_Login']) && isset($_GET['s']) && $_GET['s'] == 'e'){
+		echo '<script>alert("you need to login before viewing the details!")</script>';
+		echo '
+			<script>
+			let q = confirm("do you want to login to view details?");
+			if (q){
+				window.location = "users_Login.php";
+			}
+			</script>
+		';
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +40,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>	
 	<!--Bootstrap Js-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+	
 	<style type="text/css">
 		
 	.jumbotron {
