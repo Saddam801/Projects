@@ -130,72 +130,19 @@
 
 	<div class="container d-flex justify-content-center" style="margin-top: 80px; margin-bottom: 70px;">
 	<div class="col-md-12">
-		<form method="post">
+		<form method="get" action="usersViewProduct.php">
 			<div class="row">
 				<div class="col-md-8">
 					<input type="text" name="filter_value" class="form-control" placeholder="Search...." required>
 				</div>
 				<div class="col-md-4">
-					<button type="submit" name="filter_btn" class="btn btn-primary">Search</button>
+					<button type="submit" class="btn btn-primary">Search</button>
 				</div>			
 			</div>
 		</form>
 	</div>		
 	</div>
 
-<!--Serch box Body Area-->
-
-<div class="container-fluid my-5" >
-			<div class="col-md-12">
-				<div class="row" style="margin-left: 70px;">
-		        	<?php
-		        	if (isset($_POST['filter_btn'])) {
-						$count = 0;
-		        		$filter_value=$_POST['filter_value'];
-						$currentPage = !isset($_REQUEST['page']) ? 1 : $_REQUEST['page'];
-						$limit=6;
-						$offset=($currentPage-1)*$limit;
-
-			        	$s_sql = "SELECT * FROM product order by p_id DESC limit $offset, $limit;";
-						$limited_data = $conn->query($s_sql);
-						if ($limited_data->num_rows > 0){
-							while($dataRow = $limited_data->fetch_assoc()){
-								$all = implode('', $dataRow);
-								if (str_contains(strtolower($all), strtolower($filter_value))){
-									$count++;
-									?>
-									
-								<div class="col-md-4">
-
-									<img class="img-fluid" src="<?php echo $dataRow['p_thumb_image'];?>" style="width:295px; height: 295px;"><br>
-									<?php
-									$c_id=$dataRow['c_id'];
-									$sql1 = "SELECT * FROM category WHERE id='$c_id'";
-									$result1 = $conn->query($sql1);
-									$row1 = $result1->fetch_assoc();
-									echo $row1['cat_name'];
-									?><br>
-									<?php echo $dataRow['p_name'];?><br>
-									<?php echo $dataRow['p_area'];?>Sqft.<br>
-									$<?php echo $dataRow['p_prices'];?><br>
-									<?php echo $dataRow['p_address'];?><br>
-									<a class="btn btn-primary" href="usersViewPD.php?vpid=<?php echo $dataRow['p_id'];?>">View More</a>
-									
-								</div>
-									
-									<?php
-								}
-							}
-							if ($count <= 0) echo "0 results";
-							
-						}else{
-							echo "0 results";
-						}
-		        	}
-		        	?>
-				</div>
-			</div>
-		</div>
 </section>
 
 
@@ -206,13 +153,7 @@
 				<div class="my-5" style="margin-left: 110px;">
 					<?php
 					//---Pagination Begin---
-		        		if (!isset($_REQUEST['page'])) {
-		        			$page=1;
-		        		}
-		        		else
-		        		{
-		        			$page=$_REQUEST['page'];
-		        		}
+						$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : 1;
 		        		$limit=6;
 						$offset=($page-1)*$limit;
 		        		?>
@@ -220,13 +161,52 @@
 				<div class="row" style="margin-left: 140px;">
 		<!--		<div class="row" style="margin-left: 70px;"> -->
 		        	<?php
+
+						if (isset($_GET['filter_value'])){
+							$search = $_GET['filter_value'];					
+						}else{
+							$search = "";
+						}
+
+						if (!empty($search)){
+
+							$sql = "SELECT * FROM product WHERE CONCAT(p_name,c_id,p_area,p_prices,p_address) LIKE '%$search%' order by p_id DESC limit $offset, $limit";
+							$result = $conn->query($sql);
+							if ($result->num_rows > 0) {
+								// output data of each row
+								while($row = $result->fetch_assoc()) { ?>
+
+								<div class="col-md-4">
+
+								<img class="img-fluid" src="<?php echo $row['p_thumb_image'];?>" style="width:295px; height: 295px;"><br>
+								<strong style="position: absolute;left: 240px;top: -1.5px;z-index: 3;color: white;">
+								<?php
+								$c_id=$row['c_id'];
+								$sql1 = "SELECT * FROM category WHERE id='$c_id'";
+								$result1 = $conn->query($sql1);
+								$row1 = $result1->fetch_assoc();
+								echo $row1['cat_name'];
+								?></strong><br>
+								<b style="position: absolute;left: 15.2px;top: 246.8px;z-index: 3;color: white;">
+								<?php echo $row['p_area'];?>Sqft.<br>
+								$<?php echo $row['p_prices'];?><br></b>
+								<?php echo $row['p_name'];?><br>
+								<?php echo $row['p_address'];?><br>
+								<a class="btn btn-primary my-2" href="usersViewPD.php?vpid=<?php echo $row['p_id'];?>">View More</a>
+								</div>
+
+								<?php 
+								}}
+
+						}else{					
+
 		        		$sql = "SELECT * FROM product order by p_id DESC limit $offset, $limit";
 						$result = $conn->query($sql);
 
 						if ($result->num_rows > 0) {
 							// output data of each row
 							while($row = $result->fetch_assoc()) { ?>
-				<div class="col-md-4">
+							<div class="col-md-4">
 
 			                <img class="img-fluid" src="<?php echo $row['p_thumb_image'];?>" style="width:295px; height: 295px;"><br>
 			            	<strong style="position: absolute;left: 240px;top: -1.5px;z-index: 3;color: white;">
@@ -246,30 +226,62 @@
 				</div>
 						
 
-		          <?php }
+		          <?php }}
 						}
 						?>
 						<!---Pagination Begin--->
 						<?php
+
+						if (isset($_GET['filter_value'])){
+							$search = $_GET['filter_value'];					
+						}else{
+							$search = "";
+						}
+
+						if (!empty($search)){
+
+							$pagination = "SELECT * FROM product WHERE CONCAT(p_name,c_id,p_area,p_prices,p_address) LIKE '%$search%' order by p_id DESC";
+							$run_q= $conn->query($pagination);
+							$total_post=$run_q->num_rows;
+							$pages=ceil($total_post/$limit);
+							if ($total_post > $limit) {
+							?>
+							<nav aria-label="Page navigation" style="width:100vw;">
+						  <ul class="pagination justify-content-center pt-5 mx-5">
+						  <?php for ($i=1; $i <=$pages ; $i++) { ?>
+
+							<li class="page-item <?= ($i==$page)? $active="active" :"" ?>">
+								<a class="page-link" href="usersViewProduct.php?filter_value=<?= $search ?>&page=<?= $i ?>">
+									<?= $i ?>
+								</a>
+							</li>
+							<?php } ?>
+							</ul>
+						<?php } ?>
+					</nav>
+							
+						<?php }else{
+
 						$pagination="SELECT * FROM product";
 						$run_q= $conn->query($pagination);
 						$total_post=$run_q->num_rows;
 						$pages=ceil($total_post/$limit);
 						if ($total_post > $limit) {
 						?>
-						<nav aria-label="Page navigation" style="margin-left:75px;">
+						<nav aria-label="Page navigation" style="width:100vw;">
 						  <ul class="pagination justify-content-center pt-5 mx-5">
 						  	<?php for ($i=1; $i <=$pages ; $i++) { ?>
 
 						    <li class="page-item <?= ($i==$page)? $active="active" :"" ?>">
-						    	<a class="page-link" href="usersViewProduct.php?page=<?= $i ?>">
+							<a class="page-link" href="usersViewProduct.php?page=<?= $i ?>">
 						    		<?= $i ?>
 						    	</a>
 						    </li>
 						  	<?php } ?>
 						  </ul>
 						<?php } ?>
-						</nav>
+					</nav>
+					<?php } ?>
 						<!---------------------->
 			<!--	</div> -->
 
