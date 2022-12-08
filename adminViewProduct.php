@@ -36,12 +36,13 @@
 	<script src="js/popper.min.js"></script>
 	<!--Bootstrap Js-->
 	<script src="js/bootstrap.min.js"></script>
+
 </head>
 <body>
 	<?php include 'headerAdmin.php'; ?>
 	<div class="container-fluid mt-4">
 		<div class="card p-5">
-			<table id="example" class="table table-striped table-bordered" style="width:80%;">
+			<table id="example" class="table table-striped table-bordered">
 		        <thead>
 		            <tr>
 		            	<th>#</th>
