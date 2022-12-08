@@ -129,7 +129,9 @@
 	<section style="margin-top: 70px;">
 		<div class="container-fluid my-5">
 			<div class="col-md-12">
-				<div class="my-5" style="margin-left: 110px;">
+				<div class="my-5" style="margin-right: 100px;">
+				
+				<div class="row" style="display: flex; justify-content: end;">
 				<form method="get" action="usersViewProduct.php">
 					<div class="input-group mb-3">
 						<input type="text" class="form-control"  name="filter_value" placeholder="Search ..." required>
@@ -138,6 +140,7 @@
 						</div>
 					</div>
 				</form>
+				</div>
 										
 					<?php
 					//---Pagination Begin---
