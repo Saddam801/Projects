@@ -156,7 +156,6 @@
 						$limit=6;
 						$offset=($currentPage-1)*$limit;
 
-			        	// $sql = "SELECT * FROM product WHERE CONCAT(p_name,c_id,p_area,p_prices,p_address) LIKE '%$filter_value%' order by p_id DESC limit $offset, $limit";
 			        	$s_sql = "SELECT * FROM product order by p_id DESC limit $offset, $limit;";
 						$limited_data = $conn->query($s_sql);
 						if ($limited_data->num_rows > 0){
