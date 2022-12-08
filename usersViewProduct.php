@@ -26,10 +26,7 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<link rel="stylesheet" type="text/css" href="css/abc.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<!--Bootstrap JQuery-->
-	<script src="js/jquery.slim.min.js"></script>
 	<!--Bootstrap popper-->
 	<script src="js/popper.min.js"></script>
 	<!--Bootstrap Js-->
@@ -37,9 +34,7 @@
 
 	<title>View Property</title>
 	<!--Bootstrap JQuery-->	
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>	
-	<!--Bootstrap Js-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="js/jquery.slim.min.js"></script>
 	
 	<style type="text/css">
 		
@@ -51,6 +46,9 @@
 		width: 70px;
 		border: 1px solid none;
 		padding: 0px;
+}
+.page-link{
+	color: blue !important;
 }
 	</style>
 </head>
@@ -126,31 +124,21 @@
 
 <!--Search Form-->
 
-<section>
-
-	<div class="container d-flex justify-content-center" style="margin-top: 80px; margin-bottom: 70px;">
-	<div class="col-md-12">
-		<form method="get" action="usersViewProduct.php">
-			<div class="row">
-				<div class="col-md-8">
-					<input type="text" name="filter_value" class="form-control" placeholder="Search...." required>
-				</div>
-				<div class="col-md-4">
-					<button type="submit" class="btn btn-primary">Search</button>
-				</div>			
-			</div>
-		</form>
-	</div>		
-	</div>
-
-</section>
-
 
 	<!--Card Section-->
 	<section style="margin-top: 70px;">
 		<div class="container-fluid my-5">
 			<div class="col-md-12">
 				<div class="my-5" style="margin-left: 110px;">
+				<form method="get" action="usersViewProduct.php">
+					<div class="input-group mb-3">
+						<input type="text" class="form-control"  name="filter_value" placeholder="Search ..." required>
+						<div class="input-group-append">
+						<button type="submit" class="btn btn-primary">Search</button>
+						</div>
+					</div>
+				</form>
+										
 					<?php
 					//---Pagination Begin---
 						$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : 1;
